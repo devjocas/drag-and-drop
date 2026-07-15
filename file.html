@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <title>Exemplo dataTransfer.files</title>
+  <style>
+    #dropzone {
+      width: 300px;
+      height: 150px;
+      border: 2px dashed #888;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div id="dropzone">
+    Arrasta ficheiros aqui
+  </div>
+
+  <script>
+    const dropzone = document.getElementById('dropzone');
+
+    // Necessário para permitir o drop
+    dropzone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropzone.style.background = '#f0f0f0';
+    });
+
+    dropzone.addEventListener('dragleave', () => {
+      dropzone.style.background = '';
+    });
+
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.style.background = '';
+
+      // Aqui sim, dataTransfer.files tem os ficheiros reais
+      const files = e.dataTransfer.files; // FileList
+
+      if (!files.length) {
+        console.log('Nenhum ficheiro foi arrastado.');
+        return;
+      }
+
+      // Percorrer todos os ficheiros
+      for (const file of files) {
+        console.log('Nome:', file.name);
+        console.log('Tipo:', file.type || 'desconhecido');
+        console.log('Tamanho (bytes):', file.size);
+        console.log('Última modificação:', new Date(file.lastModified));
+      }
+
+      // Exemplo: mostrar o primeiro ficheiro na página
+      const firstFile = files[0];
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        const img = document.createElement('img');
+        img.src = reader.result;
+        img.style.maxWidth = '100%';
+        dropzone.innerHTML = '';
+        dropzone.appendChild(img);
+      };
+
+      if (firstFile.type.startsWith('image/')) {
+        reader.readAsDataURL(firstFile);
+      } else {
+        dropzone.textContent = `Ficheiro recebido: ${firstFile.name}`;
+      }
+    });
+  </script>
+</body>
+</html>
