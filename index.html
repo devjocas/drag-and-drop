@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sortable List</title>
+  <style>
+    ul { list-style: none; padding: 0; }
+    li {
+      padding: 10px; margin: 5px;
+      background: lightblue;
+      cursor: move;
+      text-align: center;
+    }
+    li:hover{
+        background: teal;
+    }
+  </style>
+</head>
+<body>
+  <h3>Reorder the items by dragging</h3>
+  <ul id="sortable">
+    <li draggable="true"> HTML </li>
+    <li draggable="true">CSS</li>
+    <li draggable="true">JAVASCRIPT</li>
+    <li draggable="true">REACT</li>
+     <li draggable="true">NODE.JS</li>
+  </ul>
+
+  <script>
+    const sortable = document.getElementById("sortable");
+    let draggedItem = null;
+
+    sortable.addEventListener("dragstart", (e) => {
+      draggedItem = e.target;
+    });
+
+    sortable.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      const target = e.target;
+      if (target.tagName === "LI" && target !== draggedItem) {
+        const rect = target.getBoundingClientRect();
+        const next = (e.clientY - rect.top) / (rect.height) > 0.5;
+        sortable.insertBefore(draggedItem, next ? target.nextSibling : target);
+      }
+    });
+  </script>
+</body>
+</html>
