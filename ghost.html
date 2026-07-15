@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Custom Drag Image</title>
+  <style>
+    #dragMe {
+      width: 100px; height: 100px;
+      background: teal; color: white;
+      text-align: center; line-height: 100px;
+      cursor: grab;
+    }
+    #dropTarget {
+      margin-top: 20px;
+      width: 250px; height: 120px;
+      border: 2px dashed gray;
+      text-align: center; padding-top: 40px;
+    }
+  </style>
+</head>
+<body>
+  <h3>Custom ghost image while dragging</h3>
+  <div id="dragMe" draggable="true">Drag me</div>
+  <div id="dropTarget">Drop here</div>
+
+  <script>
+    const dragMe = document.getElementById("dragMe");
+    const dropTarget = document.getElementById("dropTarget");
+
+    dragMe.addEventListener("dragstart", (e) => {
+      const ghost = document.createElement("div");
+      ghost.style.width = "80px";
+      ghost.style.height = "80px";
+      ghost.style.background = "orange";
+      ghost.style.borderRadius = "50%";
+      document.body.appendChild(ghost);
+      e.dataTransfer.setDragImage(ghost, 40, 40);
+      setTimeout(() => ghost.remove(), 0);
+    });
+
+    dropTarget.addEventListener("dragover", (e) => e.preventDefault());
+    dropTarget.addEventListener("drop", (e) => {
+      e.preventDefault();
+      dropTarget.textContent = "Dropped with custom ghost!";
+      dropTarget.style.background='green'
+    });
+  </script>
+</body>
+</html>
