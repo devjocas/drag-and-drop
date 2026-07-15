@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo de uso de imagem</title>
+</head>
+<style>
+    .draggable{
+        width: 100px;
+        height: 80px;
+        padding: 10px;
+        background:#f0f0f0;
+        border: 1px solid #ccc;
+        line-height: 100px;
+        cursor: grab;
+        user-select: none;
+        margin-left: 20px;
+    }
+    .dropZone{
+        margin-top: 20px;
+        width: 200px;
+        height: 150px;
+        margin-top: 20px;
+        border: 2px dashed #999;
+        text-align: center;
+        padding-top: 10px;
+    }
+</style>
+<body>
+    <div draggable="true" class="draggable" id="item">Arrasta-me</div>
+    <div class="dropZone" id="zone">Zona de soltura</div>
+    <img src="https://placehold.co/64" id="dragImg" alt="placehold-img" style="display: none;">
+
+    <script>
+        const item = document.getElementById('item')
+        const zone = document.getElementById('zone')
+        const dragImg = document.getElementById('dragImg"')
+
+        item.addEventListener('dragstart', e=>{
+            // dado para transportar
+            e.dataTransfer.setData('text/plain', item.id)
+            // Definir a imagem personalizada de arrastro
+            // cursor no centro da imagem 64x64
+            e.dataTransfer.setDragImage(dragImg, 32, 32)
+        })
+
+        zone.addEventListener('dragover', e=>{
+            e.preventDefault();
+        })
+
+         zone.addEventListener('drop', e=>{
+            e.preventDefault();
+            const id = e.dataTransfer.getData('text/plain')
+            const dragEl = document.getElementById(id)
+            zone.appendChild(dragEl)
+            zone.style.background= 'teal'
+            
+        })
+    </script>
+</body>
+</html>
